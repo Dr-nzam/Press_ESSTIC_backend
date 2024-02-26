@@ -28,7 +28,7 @@ def creerInformation(request):
     serializer=InformationSerialiserOut(data=request.data)
     if serializer.is_valid():
         serializer.save()
-        return Response({'msg':'Data  created'}, status=status.HTTP_201_CREATED)
+        return Response({'msg':'Information créer'}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
