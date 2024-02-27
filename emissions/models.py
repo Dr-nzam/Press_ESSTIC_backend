@@ -1,5 +1,5 @@
 from django.db import models
-
+from account.models import CustomUser
 # Create your models here.
 
 class Emissions(models.Model):
@@ -10,6 +10,8 @@ class Emissions(models.Model):
                              default='',blank=True, max_length=250)
     audio =models.FileField(upload_to='assets/audioemissions/',
                              default='',blank=True, max_length=250)
+    user  = models.ForeignKey(CustomUser, on_delete=models.CASCADE, 
+                               related_name='useremission', null=True, blank=True)
     
     def __str__(self) :
         return self.nom

@@ -1,41 +1,41 @@
+from rest_framework import status,generics
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework import status, generics
-from emissions.models import Emissions
 from rest_framework.permissions import IsAuthenticated
-from emissions.serializers.serializer_input import EmissionSerializerPost
-from emissions.serializers.serializer_out import EmissionSerializerGet
+from rest_framework.response import Response
+from tournois.serializer.serializer_input import TournoisSerializerPost
+from tournois.serializer.serializer_out import TournoisSerializerGet
+from tournois.models import Tournois
 
-
-@api_view(['GET'])
-def allEmission(request):
-    emission = Emissions.objects.all().order_by("-id")
-    serializer = EmissionSerializerGet(emission,many=True).data
-    return Response(serializer, status= status.HTTP_200_OK)
 
 
 @api_view(['GET'])
-def detailEmission(request, pk):
+def allTournois(request):
+    tournoi = Tournois.objects.all().order_by('-id')
+    serializer = TournoisSerializerGet(tournoi, many = True).data
+    return Response(serializer, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def detailTournoi(request, pk):
     if pk is not None:
-        emission = Emissions.objects.get(id=pk)
-        serializer = EmissionSerializerGet(emission).data
+        tournoi = Tournois.objects.get(id=pk)
+        serializer = TournoisSerializerGet(tournoi).data
         return Response(serializer, status= status.HTTP_200_OK)
     data ={"msg":"L'identifiant ne peux pas etre saans valeur "}
     return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 
 #  modifier les emissions 
-class EmissionUpdateView(generics.UpdateAPIView):
+class TournoiUpdateView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
-    queryset = Emissions.objects.all()
-    serializer_class = EmissionSerializerPost
+    queryset = Tournois.objects.all()
+    serializer_class = TournoisSerializerPost
 
 
 #add emissions
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def ajouterEmission(request):
-    serializer = EmissionSerializerPost(data = request.data)
+def ajouterTournoi(request):
+    serializer = TournoisSerializerPost(data = request.data)
     if serializer.is_valid():
         serializer.save()
         data = {"msg": "Evénement est bien ajouté "}
@@ -46,8 +46,8 @@ def ajouterEmission(request):
 #suprimer emission 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def suprimerEmission(request, pk):
-    event = Emissions.objects.get(id=pk)
+def suprimerTounoi(request, pk):
+    event = Tournois.objects.get(id=pk)
     event.delete()
     data = {"msg": "Evénement suprimé "}
     return Response (data, status=status.HTTP_200_OK)
