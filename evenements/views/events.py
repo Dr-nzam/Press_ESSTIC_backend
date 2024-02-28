@@ -30,6 +30,16 @@ class EvenementUpdateView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Evenement.objects.all()
     serializer_class = EvenementSerializerPost
+    
+    def update(self, request, *args, **kwargs):
+        event_send_id = kwargs['pk']
+        event = Evenement.objects.get(id = event_send_id)
+        user = self.request.user
+        if event.user != None:
+            if user.id != event.user.id:
+                return Response({"msg":"Vous n'êtes pas autorisé à effectuer cette modification."}, status=status.HTTP_403_FORBIDDEN)
+            return super().update(request, *args, **kwargs)
+        return Response({"msg":"Une Erreur c'est produite"}, status=status.HTTP_403_FORBIDDEN)
 
 
 #add event
@@ -49,9 +59,16 @@ def ajouterEvent(request):
 @permission_classes([IsAuthenticated])
 def suprimerEvent(request, pk):
     event = Evenement.objects.get(id=pk)
-    event.delete()
-    data = {"msg": "Evénement suprimé "}
-    return Response (data, status=status.HTTP_200_OK)
+    user = request.user
+    if event.user != None:
+        if event.user.id == user.id:
+            event.delete()
+            return Response ({"msg": "Evénement suprimé "}, status=status.HTTP_200_OK)
+        return Response ({"msg":"Vous n'êtes pas autorisé à effectuer cette supression."}, status=status.HTTP_200_OK)
+    return Response({"msg":"Une Erreur c'est produite"}, status=status.HTTP_403_FORBIDDEN)
+    
+    
+   
     
     
     

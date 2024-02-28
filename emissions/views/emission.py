@@ -30,6 +30,16 @@ class EmissionUpdateView(generics.UpdateAPIView):
     queryset = Emissions.objects.all()
     serializer_class = EmissionSerializerPost
 
+    def update(self, request, *args, **kwargs):
+        emission_send_id = kwargs['pk']
+        emission = Emissions.objects.get(id = emission_send_id)
+        user = self.request.user
+        if emission.user != None:
+            if user.id != emission.user.id:
+                return Response({"msg":"Vous n'êtes pas autorisé à effectuer cette modification."}, status=status.HTTP_403_FORBIDDEN)
+            return super().update(request, *args, **kwargs)
+        return Response({"msg":"Une Erreur c'est produite"}, status=status.HTTP_403_FORBIDDEN)
+
 
 #add emissions
 @api_view(['POST'])
@@ -47,7 +57,11 @@ def ajouterEmission(request):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def suprimerEmission(request, pk):
-    event = Emissions.objects.get(id=pk)
-    event.delete()
-    data = {"msg": "Evénement suprimé "}
-    return Response (data, status=status.HTTP_200_OK)
+    emission = Emissions.objects.get(id=pk)
+    user = request.user
+    if emission.user != None:
+        if emission.user.id == user.id:
+            emission.delete()
+            return Response ({"msg": "Evénement suprimé "}, status=status.HTTP_200_OK)
+        return Response ({"msg":"Vous n'êtes pas autorisé à effectuer cette supression."}, status=status.HTTP_200_OK)
+    return Response({"msg":"Une Erreur c'est produite"}, status=status.HTTP_403_FORBIDDEN)

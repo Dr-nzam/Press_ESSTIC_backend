@@ -40,11 +40,27 @@ def creerInformation(request):
 def suprimerInformation(request,pk):
     id=pk
     information=Information.objects.get(pk=id)
-    information.delete()
-    return Response({'msg':'Data Deleted'}, status= status.HTTP_200_OK)
+    user = request.user
+    if information.user != None:
+        if information.user.id == user.id:
+            information.delete()
+            return Response ({"msg": "Evénement suprimé "}, status=status.HTTP_200_OK)
+        return Response ({"msg":"Vous n'êtes pas autorisé à effectuer cette supression."}, status=status.HTTP_200_OK)
+    return Response({"msg":"Une Erreur c'est produite"}, status=status.HTTP_403_FORBIDDEN)
+    
 
 #  modifier les information 
 class InformationUpdateView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Information.objects.all()
     serializer_class = InformationSerialiserInput
+    
+    def update(self, request, *args, **kwargs):
+        info_send_id = kwargs['pk']
+        info = Information.objects.get(id = info_send_id)
+        user = self.request.user
+        if info.user != None:
+            if user.id != info.user.id:
+                return Response({"msg":"Vous n'êtes pas autorisé à effectuer cette modification."}, status=status.HTTP_403_FORBIDDEN)
+            return super().update(request, *args, **kwargs)
+        return Response({"msg":"Une Erreur c'est produite"}, status=status.HTTP_403_FORBIDDEN)
