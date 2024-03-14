@@ -20,4 +20,12 @@ class UserSerializerGet(serializers.ModelSerializer):
         model = CustomUser
         fields = ['username', 'email', 'number_phone', 'token' ]
         
+
+
+class UserSerializerUtilisateurSimpleGet(serializers.ModelSerializer):
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'number_phone', 'is_staff']
+        
     
