@@ -6,4 +6,4 @@ class TournoisSerializerGet(serializers.ModelSerializer):
     user = UserSerializerUtilisateurSimpleGet()
     class Meta:
         model = Tournois
-        fields = ['nom','date','lieu','image','participant','description', 'user']
+        fields = ['id','nom','date','lieu','image','participant','description', 'user']

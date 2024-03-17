@@ -8,4 +8,4 @@ class InformationSerialiserOut(serializers.ModelSerializer):
     user = UserSerializerUtilisateurSimpleGet()
     class Meta:
         model = Information
-        fields = ['titre', 'description','image','user']
+        fields = ['id','titre', 'description','image','user']

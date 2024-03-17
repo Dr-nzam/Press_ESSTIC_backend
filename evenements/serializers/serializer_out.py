@@ -7,6 +7,6 @@ class EvenementSerializerGet(serializers.ModelSerializer):
     user = UserSerializerUtilisateurSimpleGet()
     class Meta:
         model = Evenement
-        fields = ['nom', 'date', 'heureDebut', 'heureFin', 'lieu', 'description', 'image', 'user']
+        fields = ['id','nom', 'date', 'heureDebut', 'heureFin', 'lieu', 'description', 'image', 'user']
         
         

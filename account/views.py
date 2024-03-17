@@ -47,5 +47,6 @@ class ChangePasswordAPI(generics.UpdateAPIView):
 def infoUser(request):
     user = CustomUser.objects.get(id = request.user.id)
     serializer = UserSerializer(user).data
+    serializer["etat"] = 'connecté'
     return Response(serializer, status=status.HTTP_200_OK)
     

@@ -6,4 +6,4 @@ class EmissionSerializerGet(serializers.ModelSerializer):
     user = UserSerializerUtilisateurSimpleGet()
     class Meta:
         model = Emissions
-        fields = ['nom','image','video','audio', 'user']
+        fields = ['id','nom','image','video','audio', 'user']

@@ -18,7 +18,7 @@ class UserSerializerGet(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'number_phone', 'token' ]
+        fields = ['username', 'email', 'number_phone', 'token', ]
         
 
 
@@ -26,6 +26,6 @@ class UserSerializerUtilisateurSimpleGet(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'email', 'number_phone', 'is_staff']
+        fields = ['username', 'email', 'number_phone', 'is_staff', 'otp']
         
     
